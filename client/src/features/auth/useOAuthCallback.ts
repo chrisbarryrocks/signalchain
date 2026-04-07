@@ -7,7 +7,7 @@ interface UseOAuthCallbackOptions {
 
 /**
  * Reads OAuth result query params from the URL on mount, surfaces them to
- * the caller, then strips them from the history so they don't persist on
+ * the caller, then strips them from the history so they do not persist on
  * page reload.
  */
 export function useOAuthCallback({ onConnected, onError }: UseOAuthCallbackOptions): void {
@@ -36,7 +36,7 @@ export function useOAuthCallback({ onConnected, onError }: UseOAuthCallbackOptio
         `${window.location.pathname}${next ? `?${next}` : ""}`
       );
     }
-    // Run once on mount only — URL params don't change after initial load.
+    // Run once on mount only; URL params do not change after initial load.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

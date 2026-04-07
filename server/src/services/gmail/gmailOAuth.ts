@@ -1,5 +1,6 @@
 import { google } from "googleapis";
 import { env } from "../../config/env.js";
+import { logger } from "../../lib/logger.js";
 
 export function createOAuth2Client() {
   return new google.auth.OAuth2(
@@ -22,6 +23,15 @@ export function buildGmailAuthorizeUrl(state: string): string {
 
 export async function exchangeCodeForTokens(code: string) {
   const client = createOAuth2Client();
-  const { tokens } = await client.getToken(code);
-  return tokens;
+  try {
+    const { tokens } = await client.getToken(code);
+    return tokens;
+  } catch (error: unknown) {
+    const context =
+      error instanceof Error
+        ? { name: error.name, message: error.message }
+        : { message: "Unknown token exchange error" };
+    logger.error("Gmail OAuth token exchange failed", context);
+    throw error;
+  }
 }

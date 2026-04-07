@@ -28,6 +28,8 @@ interface MainContentProps {
   result: ExtractionResult | null;
   hasAnalysisForEmail: (emailId: string | null | undefined) => boolean;
   onConnect: () => void;
+  onTryDemoAccount: () => void;
+  isDemoConnecting: boolean;
   onAnalyze: () => void;
 }
 
@@ -49,6 +51,8 @@ export function MainContent({
   result,
   hasAnalysisForEmail,
   onConnect,
+  onTryDemoAccount,
+  isDemoConnecting,
   onAnalyze
 }: MainContentProps) {
   if (isGmailAuthLoading) {
@@ -66,7 +70,14 @@ export function MainContent({
   }
 
   if (!connected) {
-    return <GmailOnboarding oauthSurfaceError={oauthSurfaceError} onConnect={onConnect} />;
+    return (
+      <GmailOnboarding
+        isDemoConnecting={isDemoConnecting}
+        oauthSurfaceError={oauthSurfaceError}
+        onConnect={onConnect}
+        onTryDemoAccount={onTryDemoAccount}
+      />
+    );
   }
 
   if (isEmailListLoading) {

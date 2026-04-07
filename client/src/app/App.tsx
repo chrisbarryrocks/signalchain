@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { EmailList } from "../components/inbox/EmailList";
 import { AppShell } from "../components/layout/AppShell";
 import { Header } from "../components/layout/Header";
 import { useGmailConnection } from "../features/auth/useGmailConnection";
@@ -12,16 +13,18 @@ import {
 } from "../features/inbox/inboxSearch";
 import { API_BASE_URL } from "../lib/http";
 import { MainContent } from "./MainContent";
-import { SidebarContent } from "./SidebarContent";
 
 export function App() {
   const {
     connected,
+    email: connectedEmail,
     isLoading: isGmailAuthLoading,
     error: gmailAuthError,
     refetch: refetchGmail,
+    connectDemo,
     disconnect,
-    isDisconnecting
+    isDisconnecting,
+    isDemoConnecting
   } = useGmailConnection();
 
   const inboxEnabled = connected && !isGmailAuthLoading;
@@ -120,6 +123,7 @@ export function App() {
     <AppShell
       header={
         <Header
+          connectedEmail={connectedEmail}
           disconnectDisabled={isDisconnecting}
           gmailConnected={connected}
           onDisconnect={() => void disconnect()}
@@ -135,6 +139,7 @@ export function App() {
           filteredEmailCount={filteredEmails.length}
           gmailAuthError={gmailAuthError}
           hasAnalysisForEmail={hasAnalysisForEmail}
+          isDemoConnecting={isDemoConnecting}
           isEmailListLoading={isEmailListLoading}
           isExtracting={isExtracting}
           isGmailAuthLoading={isGmailAuthLoading}
@@ -142,29 +147,25 @@ export function App() {
           oauthSurfaceError={oauthSurfaceError}
           onAnalyze={() => email && void runExtraction(email.id)}
           onConnect={startGmailOAuth}
+          onTryDemoAccount={() => void connectDemo()}
           result={result}
           selectedEmailError={selectedEmailError}
           selectedEmailId={selectedEmailId}
         />
       }
       sidebar={
-        <SidebarContent
-          connected={connected}
-          emailCount={emails.length}
-          emailListError={emailListError}
-          gmailAuthError={gmailAuthError}
-          isEmailListLoading={isEmailListLoading}
-          isGmailAuthLoading={isGmailAuthLoading}
-          isInboxRefreshing={isInboxRefreshing}
-          likely={likelyFiltered}
-          onConnectRequest={startGmailOAuth}
-          onQueryChange={setInboxQuery}
-          onRefresh={handleInboxRefresh}
-          onSelect={setSelectedEmailId}
-          other={otherFiltered}
-          query={inboxQuery}
-          selectedEmailId={selectedEmailId}
-        />
+        connected ? (
+          <EmailList
+            isRefreshing={isInboxRefreshing}
+            likely={likelyFiltered}
+            onQueryChange={setInboxQuery}
+            onRefresh={handleInboxRefresh}
+            onSelect={setSelectedEmailId}
+            other={otherFiltered}
+            query={inboxQuery}
+            selectedEmailId={selectedEmailId}
+          />
+        ) : undefined
       }
     />
   );
