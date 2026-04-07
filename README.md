@@ -1,16 +1,21 @@
 # SignalChain
 
-SignalChain is a Desteia-inspired logistics operations demo that ingests vendor email updates, extracts structured shipment risk data with AI, and surfaces actionable alerts in a lightweight operations dashboard.
+SignalChain is a logistics intelligence workspace that transforms unstructured email communication into structured, actionable operational insight.
 
-## Why this exists
+It connects to a Gmail inbox, analyzes selected messages, and extracts key information such as shipment issues, business impact, and recommended actions. The goal is to reduce time spent parsing email threads and make operational decisions faster and clearer.
 
-The goal of this project is to demonstrate a product-minded interpretation of a real supply chain workflow:
+## Features
 
-- vendor communication arrives through email
-- the system interprets the update
-- operations teams receive structured, actionable information instead of inbox chaos
-
-This repo intentionally focuses on one polished workflow rather than a broad, shallow feature set.
+- Gmail OAuth connection and inbox ingestion
+- Smart grouping of emails into relevant vs other
+- AI-powered classification and structured extraction
+- Structured output including:
+  - risk summary
+  - business impact
+  - key shipment details
+  - recommended actions
+- Safe handling of non-relevant emails without generating false data
+- Re-analyze and refresh workflows
 
 ## Stack
 
@@ -28,48 +33,48 @@ This repo intentionally focuses on one polished workflow rather than a broad, sh
 ### Integrations
 - Gmail API
 - OpenAI API
-- Zod for validation
+- Zod
 
 ## Architecture
 
-1. The backend reads recent emails from either Gmail or a mock source
-2. The frontend renders an inbox and selected message view
-3. The user analyzes an email
-4. The backend extracts structured shipment risk data
-5. The frontend renders a risk alert, extracted details, and recommended actions
+1. The backend connects to Gmail via OAuth and fetches recent emails
+2. The frontend renders an inbox grouped by likely relevance
+3. The user selects an email and triggers analysis
+4. The backend performs structured extraction using OpenAI
+5. The frontend presents risk classification, key details, business impact, and recommended actions
 
 ## Run locally
 
-### 1. Install dependencies
+### Install dependencies
 
 ```bash
 npm install
 ```
 
-### 2. Configure environment
+### Configure environment
 
-Create `server/.env` using `server/.env.example`.
+Create `server/.env` based on `server/.env.example`.
 
-### 3. Start the app
+### Start the app
 
 ```bash
 npm run dev
 ```
 
-- Client: `http://localhost:5173`
-- Server: `http://localhost:4000`
+- Client: http://localhost:5173
+- Server: http://localhost:4000
 
-## Modes
+## Environment Modes
 
 ### Email source
-- `mock` - use local mock logistics emails
-- `gmail` - use Gmail API
+- mock - local test data
+- gmail - live Gmail integration
 
-### Extractor mode
-- `mock` - use deterministic extraction for local development
-- `openai` - use OpenAI structured extraction
+### Extraction mode
+- mock - deterministic output
+- openai - real structured extraction
 
-These are controlled through server environment variables.
+Configured via server environment variables.
 
 ## Scripts
 
@@ -80,24 +85,11 @@ npm run lint
 npm run typecheck
 ```
 
-## Repo layout
+## Project Structure
 
 ```text
 client/   React frontend
-server/   Express API + integrations
-docs/     Product and implementation docs
+server/   Express API and integrations
 ```
 
-## Demo story
-
-A vendor sends an email saying a shipment is delayed due to port congestion. SignalChain reads the email, extracts the issue, assesses the risk, and shows the operations user what changed and what to do next.
-
-## Notes
-
-This project is intentionally scoped as a demo:
-- no auth
-- no persistence
-- no background sync
-- one polished happy path
-
-The emphasis is on clean architecture, strong typing, and product-oriented UX.
+The application is deployed as a full-stack system with a separate frontend and API layer.
