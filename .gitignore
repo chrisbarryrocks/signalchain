@@ -1,0 +1,19 @@
+node_modules
+dist
+.env
+.env.local
+.gmail-tokens.json
+coverage
+.DS_Store
+.vscode
+npm-debug.log*
+
+# TypeScript incremental build caches
+client/tsconfig.*.tsbuildinfo
+
+# Compiled Vite config artifacts (canonical source is vite.config.ts)
+client/vite.config.js
+client/vite.config.d.ts
+
+# Archive
+signalchain.zip
