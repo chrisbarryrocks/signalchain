@@ -16,14 +16,10 @@ function seedFromEnv(): void {
   if (seeded) return;
   seeded = true;
 
-  const refreshToken = env.GMAIL_REFRESH_TOKEN?.trim();
-  if (refreshToken) {
-    memoryStore = {
-      refresh_token: refreshToken,
-      access_token: env.GMAIL_ACCESS_TOKEN?.trim() || undefined,
-      expiry_date: env.GMAIL_EXPIRY_DATE ?? undefined
-    };
-    logger.info("Gmail token store seeded from environment variables");
+  const demoRefresh = env.DEMO_GMAIL_REFRESH_TOKEN?.trim();
+  if (demoRefresh) {
+    memoryStore = { refresh_token: demoRefresh };
+    logger.info("Gmail token store seeded from DEMO_GMAIL_REFRESH_TOKEN");
   }
 }
 
@@ -86,11 +82,10 @@ export async function loadStoredTokens(): Promise<StoredGmailTokens | null> {
 export async function saveStoredTokens(tokens: StoredGmailTokens): Promise<void> {
   memoryStore = tokens;
 
-  const envToken = env.GMAIL_REFRESH_TOKEN?.trim();
-  if (!envToken || envToken !== tokens.refresh_token) {
+  const demoEnv = env.DEMO_GMAIL_REFRESH_TOKEN?.trim();
+  if (!demoEnv || demoEnv !== tokens.refresh_token) {
     logger.info(
-      "New Gmail refresh token issued. To persist this connection across restarts, " +
-        "set GMAIL_REFRESH_TOKEN in your hosting environment.",
+      "New Gmail refresh token issued. Set DEMO_GMAIL_REFRESH_TOKEN on the server to persist the demo account across restarts.",
       { refresh_token: tokens.refresh_token }
     );
   }

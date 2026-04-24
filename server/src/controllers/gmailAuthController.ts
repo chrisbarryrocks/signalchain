@@ -130,11 +130,7 @@ export async function gmailAuthDemoLoginController(_request: Request, response: 
     return;
   }
 
-  await saveStoredTokens({
-    refresh_token: refreshToken,
-    access_token: env.DEMO_GMAIL_ACCESS_TOKEN?.trim() || undefined,
-    expiry_date: env.DEMO_GMAIL_EXPIRY_DATE ?? undefined
-  });
+  await saveStoredTokens({ refresh_token: refreshToken });
 
   logger.info("Demo Gmail login successful");
   response.json({ connected: true });

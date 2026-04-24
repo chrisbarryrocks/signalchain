@@ -27,12 +27,7 @@ const baseSchema = z.object({
   OAUTH_REDIRECT_URI: z.string().url().optional(),
   OAUTH_SUCCESS_REDIRECT: z.string().url().default("http://localhost:5173/"),
   CLIENT_ORIGIN: z.string().url().default("http://localhost:5173"),
-  GMAIL_REFRESH_TOKEN: z.string().optional(),
-  GMAIL_ACCESS_TOKEN: z.string().optional(),
-  GMAIL_EXPIRY_DATE: z.coerce.number().optional(),
   DEMO_GMAIL_REFRESH_TOKEN: z.string().optional(),
-  DEMO_GMAIL_ACCESS_TOKEN: z.string().optional(),
-  DEMO_GMAIL_EXPIRY_DATE: z.coerce.number().optional(),
   GMAIL_TOKEN_FILE: z.string().optional(),
   GMAIL_LIST_QUERY: z.string().default("in:inbox newer_than:14d"),
   GMAIL_MAX_RESULTS: z.coerce.number().int().min(1).max(100).default(25)

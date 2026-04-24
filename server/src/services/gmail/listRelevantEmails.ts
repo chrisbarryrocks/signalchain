@@ -4,14 +4,22 @@ import { isLikelyLogisticsEmailMock } from "../extraction/logisticsRelevanceHeur
 import { getGmailClient } from "./gmailClient.js";
 import { getHeader } from "./gmailUtils.js";
 import { mapGmailApiError } from "./mapGmailError.js";
+import { loadStoredTokens } from "./tokenStore.js";
 
 export async function listRelevantEmails(): Promise<EmailSummary[]> {
   try {
     const gmail = await getGmailClient();
+    const stored = await loadStoredTokens();
+    const demoRefresh = env.DEMO_GMAIL_REFRESH_TOKEN?.trim();
+    const listQuery =
+      demoRefresh && stored?.refresh_token === demoRefresh
+        ? "in:inbox"
+        : env.GMAIL_LIST_QUERY;
+
     const response = await gmail.users.messages.list({
       userId: "me",
       maxResults: env.GMAIL_MAX_RESULTS,
-      q: env.GMAIL_LIST_QUERY
+      q: listQuery
     });
 
     const messages = response.data.messages ?? [];
